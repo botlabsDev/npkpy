@@ -23,7 +23,7 @@ setuptools.setup(
     ],
     entry_points={
         'console_scripts': [
-            "npkPy=npkpy.main:main",
+            "npkpy=npkpy.main:main",
             # "npkDownloader=npkpy.download:main",
         ],
     },

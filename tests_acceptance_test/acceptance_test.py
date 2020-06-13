@@ -19,12 +19,12 @@ class Test_npkPy(unittest.TestCase):
         self.dstFolder.rmdir()
 
     def test_showAllContainersFromNpkPkg(self):
-        cmd = ["npkPy", "--file", self.pathToNpk, "--showContainer"]
+        cmd = ["npkpy", "--file", self.pathToNpk, "--showContainer"]
         output = runCmdInTerminal(cmd)
         self.assertEqual(self.npkContainerList, output)
 
     def test_exportAllContainerFromNpk(self):
-        cmd = ["npkPy", "--file", self.pathToNpk, "--dstFolder", self.dstFolder.absolute(), "--exportAll"]
+        cmd = ["npkpy", "--file", self.pathToNpk, "--dstFolder", self.dstFolder.absolute(), "--exportAll"]
 
         runCmdInTerminal(cmd)
 
@@ -42,7 +42,7 @@ class Test_npkPy(unittest.TestCase):
                           'npkPyExport_gps-6.45.6/009_cnt_CntArchitectureTag.raw'], exportedContainer)
 
     def test_extractSquashFsContainerFromNpk(self):
-        cmd = ["npkPy", "--file", self.pathToNpk, "--dstFolder", self.dstFolder.absolute(), "--exportSquashFs"]
+        cmd = ["npkpy", "--file", self.pathToNpk, "--dstFolder", self.dstFolder.absolute(), "--exportSquashFs"]
 
         runCmdInTerminal(cmd)
 
@@ -51,7 +51,7 @@ class Test_npkPy(unittest.TestCase):
 
     #
     def test_extractZlibContainerFromNpk_NonExisitngNotExtracted(self):
-        cmd = ["npkPy", "--file", self.pathToNpk, "--dstFolder", self.dstFolder.absolute(), "--exportZlib"]
+        cmd = ["npkpy", "--file", self.pathToNpk, "--dstFolder", self.dstFolder.absolute(), "--exportZlib"]
 
         runCmdInTerminal(cmd)
 

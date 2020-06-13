@@ -5,7 +5,7 @@
 
 # npkPy
 The npkPy package module is an unpacking tool for MikroTiks custom NPK container format. The tool is capable 
-to display to the content of any NPK package and to export all container.
+to display the content of any NPK package and to export all container.
 
 ["NPK stands for MikroTik RouterOS upgrade package"](https://whatis.techtarget.com/fileformat/NPK-MikroTik-RouterOS-upgrade-package)
 and since there is no solid unpacking tool for the format available, I want to share my approach of it.
@@ -19,6 +19,12 @@ Please be aware, that you can't create or modify __valid__ packages [since they 
 ```
 All recent packages are signed with EC-KCDSA signature, 
 and there's no way to create a valid npk file unless you know a secret key.
+```
+
+## Installation
+
+```
+pip install npkPy
 ```
 
 ## Usage
