@@ -11,7 +11,7 @@ if [[ ! -e ${venv} ]]; then
 fi
 
 git config user.name "botlabsDev"
-git config user.email "botlabs.dev@botlabs.dev"
+git config user.email "54632107+botlabsDev@users.noreply.github.com"
 echo "--git config--"
 echo -n "git user:"; git config user.name
 echo -n "git email:"; git config user.email
