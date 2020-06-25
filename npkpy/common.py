@@ -66,5 +66,9 @@ class NPKIdError(BaseException):
     pass
 
 
+class NPKMagicBytesError(BaseException):
+    pass
+
+
 class NPKError(BaseException):
     pass

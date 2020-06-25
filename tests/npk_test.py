@@ -3,7 +3,7 @@ import tempfile
 import unittest
 from pathlib import Path
 
-from npkpy.common import NPKError, NPKIdError
+from npkpy.common import NPKError, NPKIdError, NPKMagicBytesError
 from npkpy.npk.npk import Npk
 from npkpy.npk.pck_header import PckHeader
 from tests.constants import DummyHeaderCnt, MAGIC_BYTES, get_dummy_npk_binary
@@ -18,7 +18,7 @@ class Test_npkClass(unittest.TestCase):
     def test_fileIsNoNpkFile(self):
         self.npkFile.write_bytes(b"NoMagicBytesAtHeadOfFile")
 
-        with self.assertRaises(NPKError) as e:
+        with self.assertRaises(NPKMagicBytesError) as e:
             _ = Npk(self.npkFile).pck_magic_bytes
         self.assertEqual(e.exception.args[0], "Magic bytes not found in Npk file")
 

@@ -1,7 +1,7 @@
 import struct
 from pathlib import Path
 
-from npkpy.common import NPKError, NPKIdError
+from npkpy.common import NPKError, NPKIdError, NPKMagicBytesError
 from npkpy.npk.npk_constants import CNT_HANDLER
 from npkpy.npk.cnt_basic import BYTES_LEN_CNT_ID, BYTES_LEN_CNT_PAYLOAD_LEN
 from npkpy.npk.npk_file_basic import FileBasic
@@ -99,4 +99,4 @@ class Npk(FileBasic):
 
     def _check_magic_bytes(self, error_msg):
         if not self.pck_magic_bytes == MAGIC_BYTES:
-            raise NPKError(error_msg)
+            raise NPKMagicBytesError(error_msg)
