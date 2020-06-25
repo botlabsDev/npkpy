@@ -1,4 +1,3 @@
-# HEADER
 import struct
 
 from npkpy.npk.pck_header import NPK_PCK_HEADER
@@ -85,7 +84,8 @@ class DummyHeaderCnt:
                self._02_payloadSpecialFlag
 
 
-class DummyRequirementsHeader:
+# pylint: disable=too-many-locals
+def get_dummy_requirements_header(structId):
     _00_cnt_id = struct.pack("H", 3)
     _01_cnt_payload_len = struct.pack("I", 35)
     _02_cnt_struct_id = struct.pack("H", 0)
@@ -105,53 +105,27 @@ class DummyRequirementsHeader:
 
     _13_cnt_flags = struct.pack("5B", 0, 0, 0, 0, 0)
 
-    def __init__(self, structId):
-        self._02_cnt_struct_id = struct.pack(b"H", structId)
-
-    @property
-    def get_binary(self):
-        return (self._00_cnt_id +
-                self._01_cnt_payload_len +
-                self._02_payload
+    def _build_payload():
+        return (_02_cnt_struct_id +
+                _03_cnt_program_name +
+                _04_cnt_min_versionRevision +
+                _05_cnt_min_versionRc +
+                _06_cnt_min_versionMinor +
+                _07_cnt_min_versionMajor +
+                _08_cnt_nullBock +
+                _09_cnt_max_versionRevision +
+                _10_cnt_max_versionRc +
+                _11_cnt_max_versionMinor +
+                _12_cnt_max_versionMajor +
+                _13_cnt_flags
                 )
 
-    @property
-    def _02_payload(self):
-        return (self._02_cnt_struct_id +
-                self._03_cnt_program_name +
-                self._04_cnt_min_versionRevision +
-                self._05_cnt_min_versionRc +
-                self._06_cnt_min_versionMinor +
-                self._07_cnt_min_versionMajor +
-                self._08_cnt_nullBock +
-                self._09_cnt_max_versionRevision +
-                self._10_cnt_max_versionRc +
-                self._11_cnt_max_versionMinor +
-                self._12_cnt_max_versionMajor +
-                self._13_cnt_flags
-                )
+    _02_cnt_struct_id = struct.pack(b"H", structId)
+    return (_00_cnt_id + _01_cnt_payload_len + _build_payload())
 
 
-class DummyBasicCnt:
-    _00_cnt_id = struct.pack("h", -1)
+def get_dummy_basic_cnt(cnt_id=-1):
+    _00_cnt_id = struct.pack("h", cnt_id)
     _02_cnt_payload = struct.pack("7s", b"Payload")
     _01_cnt_payload_len = struct.pack("I", len(_02_cnt_payload))
-
-    @property
-    def cnt_full_binary(self):
-        return self._00_cnt_id + \
-               self._01_cnt_payload_len + \
-               self._02_cnt_payload
-
-
-class DummyMulticontainer_Header:
-    payload = b"d" * 28 + b"0" * 4
-    _00_cnt_id = struct.pack("h", 18)
-    _01_cnt_payload_len = struct.pack("I", len(payload))
-    _02_cnt_payload = struct.pack(f"{len(payload)}s", payload)
-
-    @property
-    def cnt_full_binary(self):
-        return self._00_cnt_id + \
-               self._01_cnt_payload_len + \
-               self._02_cnt_payload
+    return _00_cnt_id + _01_cnt_payload_len + _02_cnt_payload

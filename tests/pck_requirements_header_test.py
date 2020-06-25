@@ -1,26 +1,25 @@
-import struct
 import unittest
 
 from npkpy.npk.pck_requirements_header import PckRequirementsHeader
-from tests.constants import DummyHeaderCnt, DummyRequirementsHeader
+from tests.constants import get_dummy_requirements_header
 
 
 class Test_pktRequirementsHeader(unittest.TestCase):
     def setUp(self) -> None:
-        self.cnt = createContainer(structId=0)
+        self.cnt = createRequirementsHeaderCnt(structId=0)
 
     def test_validateCntId(self):
         self.assertEqual(3, self.cnt.cnt_id)
 
     def test_getCntStructId(self):
-        self.assertEqual(0, createContainer(structId=0).cnt_structure_id)
-        self.assertEqual(1, createContainer(structId=1).cnt_structure_id)
-        self.assertEqual(2, createContainer(structId=2).cnt_structure_id)
+        self.assertEqual(0, createRequirementsHeaderCnt(structId=0).cnt_structure_id)
+        self.assertEqual(1, createRequirementsHeaderCnt(structId=1).cnt_structure_id)
+        self.assertEqual(2, createRequirementsHeaderCnt(structId=2).cnt_structure_id)
 
 
 class Test_pktRequirementsHeader_StructIdZero(unittest.TestCase):
     def setUp(self) -> None:
-        self.cnt = createContainer(structId=0)
+        self.cnt = createRequirementsHeaderCnt(structId=0)
 
     def test_getCntFlags(self):
         self.assertEqual("<not available for version 0,1>", self.cnt.cnt_flags)
@@ -41,7 +40,7 @@ class Test_pktRequirementsHeader_StructIdZero(unittest.TestCase):
         self.assertEqual("<not available for version 0,1>", self.cnt.cnt_flags)
 
     def test_FullBinary(self):
-        self.assertEqual(DummyRequirementsHeader(structId=0).get_binary, self.cnt.cnt_full_binary)
+        self.assertEqual(get_dummy_requirements_header(structId=0), self.cnt.cnt_full_binary)
 
     def test_getOutput(self):
         self.assertEqual(('PckRequirementsHeader',
@@ -61,7 +60,7 @@ class Test_pktRequirementsHeader_StructIdZero(unittest.TestCase):
 
 class Test_pktRequirementsHeader_StructIdOne(unittest.TestCase):
     def setUp(self) -> None:
-        self.cnt = createContainer(structId=1)
+        self.cnt = createRequirementsHeaderCnt(structId=1)
 
     def test_getProgramName(self):
         self.assertEqual("abcdefghijklmnop", self.cnt.cnt_program_name)
@@ -79,7 +78,7 @@ class Test_pktRequirementsHeader_StructIdOne(unittest.TestCase):
         self.assertEqual("<not available for version 0,1>", self.cnt.cnt_flags)
 
     def test_FullBinary(self):
-        self.assertEqual(DummyRequirementsHeader(structId=1).get_binary, self.cnt.cnt_full_binary)
+        self.assertEqual(get_dummy_requirements_header(structId=1), self.cnt.cnt_full_binary)
 
     def test_getOutput(self):
         self.assertEqual(('PckRequirementsHeader',
@@ -99,7 +98,7 @@ class Test_pktRequirementsHeader_StructIdOne(unittest.TestCase):
 
 class Test_pktRequirementsHeader_StructIdTwo(unittest.TestCase):
     def setUp(self) -> None:
-        self.cnt = createContainer(structId=2)
+        self.cnt = createRequirementsHeaderCnt(structId=2)
 
     def test_getProgramName(self):
         self.assertEqual("abcdefghijklmnop", self.cnt.cnt_program_name)
@@ -117,7 +116,7 @@ class Test_pktRequirementsHeader_StructIdTwo(unittest.TestCase):
         self.assertEqual((0, 0, 0, 0), self.cnt.cnt_flags)
 
     def test_FullBinary(self):
-        self.assertEqual(DummyRequirementsHeader(structId=2).get_binary, self.cnt.cnt_full_binary)
+        self.assertEqual(get_dummy_requirements_header(structId=2), self.cnt.cnt_full_binary)
 
     def test_getOutput(self):
         self.assertEqual(('PckRequirementsHeader',
@@ -135,6 +134,5 @@ class Test_pktRequirementsHeader_StructIdTwo(unittest.TestCase):
                            'Flags:            (0, 0, 0, 0)']), self.cnt.output_cnt)
 
 
-def createContainer(structId):
-    dummy_cnt = DummyRequirementsHeader(structId)
-    return PckRequirementsHeader(dummy_cnt.get_binary, offset_in_pck=0)
+def createRequirementsHeaderCnt(structId):
+    return PckRequirementsHeader(get_dummy_requirements_header(structId), offset_in_pck=0)

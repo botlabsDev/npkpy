@@ -1,15 +1,14 @@
 import tempfile
 import unittest
-from pathlib import Path, PosixPath
+from pathlib import Path
 from unittest.mock import Mock
 
 from npkpy.common import get_short_pkt_info, get_short_cnt_info, get_all_nkp_files, write_to_file, extract_container, \
     get_full_cnt_info, get_full_pkt_info, sha1_sum_from_binary, sha1_sum_from_file
 from npkpy.npk.cnt_basic import CntBasic
 from npkpy.npk.npk import Npk
-from npkpy.npk.npk_constants import CNT_HANDLER
 from npkpy.npk.pck_header import NPK_PCK_HEADER
-from tests.constants import DummyBasicCnt, get_dummy_npk_binary, DummyHeaderCnt
+from tests.constants import get_dummy_npk_binary, DummyHeaderCnt, get_dummy_basic_cnt
 
 
 class Test_findNpkFiles(unittest.TestCase):
@@ -72,8 +71,8 @@ class Common_Test(unittest.TestCase):
         self.output_folder.mkdir()
 
     def tearDown(self) -> None:
-        def delete_directory(dir):
-            for _file in dir.rglob("*"):
+        def delete_directory(folder):
+            for _file in folder.rglob("*"):
                 if _file.is_file():
                     _file.unlink()
                 else:
@@ -122,7 +121,7 @@ class Common_Test(unittest.TestCase):
         self.assertEqual(DummyHeaderCnt()._02_payload, created_files[0].read_bytes())
 
     def test_getFullCntInfo_asString(self):
-        result = get_full_cnt_info(CntBasic(DummyBasicCnt().cnt_full_binary, offset_in_pck=0))
+        result = get_full_cnt_info(CntBasic(get_dummy_basic_cnt(), offset_in_pck=0))
 
         self.assertEqual(['CntBasic',
                           '  Cnt id:           -1',

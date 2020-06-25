@@ -33,6 +33,6 @@ class FileInfo_Test(unittest.TestCase):
     def test_filenameArchitecture_returnDefaultIfNotMentionedInFilename(self):
         self.assertEqual("x86", self.file.filename_architecture)
 
-    def test_filenameArchitecture_returnDefaultIfNotMentionedInFilename(self):
+    def test_filenameArchitecture_validateArchitectures(self):
         for arch in ARCHITECTURES:
-            self.assertEqual(arch, (FileBasic(Path(f"file-name-1.2.3-{arch}.npk")).filename_architecture))
+            self.assertEqual(arch, FileBasic(Path(f"file-name-1.2.3-{arch}.npk")).filename_architecture)

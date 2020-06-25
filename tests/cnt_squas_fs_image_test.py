@@ -1,15 +1,12 @@
-import struct
 import unittest
 
 from npkpy.npk.cnt_squasfs_image import CntSquashFsImage
-from tests.constants import DummyBasicCnt
+from tests.constants import get_dummy_basic_cnt
 
 
 class Test_cntSquashFsImage(unittest.TestCase):
     def setUp(self) -> None:
-        dummyCnt = DummyBasicCnt()
-        dummyCnt._00_cnt_id = struct.pack("h", 21)
-        self.cnt = CntSquashFsImage(dummyCnt.cnt_full_binary, offset_in_pck=0)
+        self.cnt = CntSquashFsImage(get_dummy_basic_cnt(cnt_id=21), offset_in_pck=0)
 
         self.expectedHash = b'\xc3\x04\x15\xea\xccjYDit\xb7\x16\xef\xf5l\xf2\x82\x19\x81]'
 

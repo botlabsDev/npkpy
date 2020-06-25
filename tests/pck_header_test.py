@@ -3,7 +3,6 @@ import struct
 import unittest
 
 from npkpy.npk.pck_header import PckHeader
-from npkpy.npk.pck_multicontainer_header import PktMulticontainerHeader
 from tests.constants import DummyHeaderCnt
 
 

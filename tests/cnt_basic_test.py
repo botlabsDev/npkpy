@@ -3,21 +3,19 @@ import unittest
 
 from npkpy.common import NPKError
 from npkpy.npk.cnt_basic import CntBasic
-from tests.constants import DummyBasicCnt
+from tests.constants import get_dummy_basic_cnt
 
 
 class Test_CntBasic(unittest.TestCase):
 
     def setUp(self) -> None:
-        self.cnt = CntBasic(data=DummyBasicCnt().cnt_full_binary, offset_in_pck=0)
+        self.cnt = CntBasic(data=get_dummy_basic_cnt(), offset_in_pck=0)
 
     def test_extractCntId(self):
         self.assertEqual(-1, self.cnt.cnt_id)
 
     def test_failForWrongCntId(self):
-        dummy_cnt = DummyBasicCnt()
-        dummy_cnt._00_cnt_id = struct.pack("h", 999)
-        cnt = CntBasic(dummy_cnt.cnt_full_binary, offset_in_pck=0)
+        cnt = CntBasic(get_dummy_basic_cnt(cnt_id=999), offset_in_pck=0)
         with self.assertRaises(NPKError) as _exception:
             _ = cnt.cnt_id
         self.assertEqual("Cnt object does not represent given container typ -1/999", _exception.exception.args[0])
@@ -32,7 +30,7 @@ class Test_CntBasic(unittest.TestCase):
         self.assertEqual(b"Payload", self.cnt.cnt_payload)
 
     def test_extractCntFromGivenOffset(self):
-        self.assertEqual(len(DummyBasicCnt().cnt_full_binary), self.cnt.cnt_full_length)
+        self.assertEqual(len(get_dummy_basic_cnt()), self.cnt.cnt_full_length)
 
     def test_giveOverviewOfCnt(self):
         expected_result = ('CntBasic', ['Cnt id:           -1',
@@ -43,12 +41,12 @@ class Test_CntBasic(unittest.TestCase):
         self.assertEqual(expected_result, self.cnt.output_cnt)
 
     def test_getFullBinaryOfContainer(self):
-        self.assertEqual(DummyBasicCnt().cnt_full_binary, self.cnt.cnt_full_binary)
+        self.assertEqual(get_dummy_basic_cnt(), self.cnt.cnt_full_binary)
 
 
 class Test_modifyNpkContainerBasic(unittest.TestCase):
     def setUp(self) -> None:
-        self.cnt = CntBasic(DummyBasicCnt().cnt_full_binary, offset_in_pck=0)
+        self.cnt = CntBasic(get_dummy_basic_cnt(), offset_in_pck=0)
 
     def test_increaseCntSize(self):
         orig_cnt_full_length = self.cnt.cnt_full_length
