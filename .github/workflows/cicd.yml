@@ -29,12 +29,21 @@ jobs:
         run: |
           pip install pytest pytest-cov codecov
           pytest --cov=npkpy --cov=acceptance_test
+          
+      - name: Publish to codecov
+        run: |
           codecov --token=${{ secrets.CODECOV_TOKEN }}
+          
+      - name: Run codacy-coverage-reporter
+        uses: codacy/codacy-coverage-reporter-action@master
+        with:
+          project-token: ${{ secrets.CODACY_PROJECT_TOKEN }}
+          coverage-reports: cobertura.xml          
 
   release:
     runs-on: ubuntu-latest
     needs: tests
-    if: github.event_name == 'push' && github.ref == 'master'
+    if: github.event_name == 'push' && github.ref == 'refs/heads/master'
 
     steps:
       - uses: actions/checkout@v1
