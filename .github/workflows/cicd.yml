@@ -56,14 +56,16 @@ jobs:
         run: |
           python3 setup.py sdist bdist_wheel
 
-      - name: Release npkPy to test.pypi.org
-        uses: pypa/gh-action-pypi-publish@master
-        with:
-          password: ${{ secrets.TEST_PYPI_PASSWORD }}
-          repository_url: https://test.pypi.org/legacy/
 
       - name: Release npkPy to PyPI
-        if: github.event_name == 'release'
+        # if: github.event_name == 'release'
         uses: pypa/gh-action-pypi-publish@master
         with:
           password: ${{ secrets.PYPI_PASSWORD }}
+
+      #- name: Release npkPy to test.pypi.org
+      #  uses: pypa/gh-action-pypi-publish@master
+      #  with:
+      #    password: ${{ secrets.TEST_PYPI_PASSWORD }}
+      #    repository_url: https://test.pypi.org/legacy/
+
