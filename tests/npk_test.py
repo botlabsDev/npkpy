@@ -3,9 +3,10 @@ import tempfile
 import unittest
 from pathlib import Path
 
+from npkpy.common import NPKError, NPKIdError
 from npkpy.npk.npk import Npk
 from npkpy.npk.pck_header import PckHeader
-from tests.constants import DummyHeaderCnt, MAGICBYTES, get_dummy_npk_binary
+from tests.constants import DummyHeaderCnt, MAGIC_BYTES, get_dummy_npk_binary
 
 
 class Test_npkClass(unittest.TestCase):
@@ -17,20 +18,20 @@ class Test_npkClass(unittest.TestCase):
     def test_fileIsNoNpkFile(self):
         self.npkFile.write_bytes(b"NoMagicBytesAtHeadOfFile")
 
-        with self.assertRaises(RuntimeError) as e:
+        with self.assertRaises(NPKError) as e:
             _ = Npk(self.npkFile).pck_magic_bytes
         self.assertEqual(e.exception.args[0], "Magic bytes not found in Npk file")
 
     def test_npkFileIsCorrupt_fileCorruptException(self):
-        self.npkFile.write_bytes(MAGICBYTES + b"CorruptFile")
+        self.npkFile.write_bytes(MAGIC_BYTES + b"CorruptFile")
 
-        with self.assertRaises(RuntimeError) as e:
+        with self.assertRaises(NPKError) as e:
             _ = Npk(self.npkFile).pck_cnt_list
         self.assertEqual(e.exception.args[0],
                          f"File maybe corrupted. Please download again. File: {self.npkFile.absolute()}")
 
     def test_extractMagicBytes(self):
-        self.assertEqual(MAGICBYTES, Npk(self.npkFile).pck_magic_bytes)
+        self.assertEqual(MAGIC_BYTES, Npk(self.npkFile).pck_magic_bytes)
 
     def test_extractLenOfNpkPayload_propagatedSizeIsValid(self):
         self.assertEqual(len(DummyHeaderCnt().get_binary), Npk(self.npkFile).pck_payload_len)
@@ -60,9 +61,9 @@ class Test_npkClass(unittest.TestCase):
     def test_getAllCnt_exceptionWithUnknownCntInNpk(self):
         unknownCnt = DummyHeaderCnt()
         unknownCnt._00_cnt_id = struct.pack("H", 999)
-        self.npkFile.write_bytes(get_dummy_npk_binary(payload=unknownCnt.get_binary))
+        self.npkFile.write_bytes(get_dummy_npk_binary(cnt=unknownCnt.get_binary))
 
-        with self.assertRaises(RuntimeError) as e:
+        with self.assertRaises(NPKIdError) as e:
             _ = Npk(self.npkFile).pck_cnt_list
-        self.assertEqual(e.exception.args[0], f"failed with id: 999\n"
+        self.assertEqual(e.exception.args[0], f"Failed with cnt id: 999\n"
                                               f"New cnt id discovered in file: {self.npkFile.absolute()}")

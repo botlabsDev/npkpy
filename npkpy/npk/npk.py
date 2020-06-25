@@ -1,6 +1,7 @@
 import struct
 from pathlib import Path
 
+from npkpy.common import NPKError, NPKIdError
 from npkpy.npk.npk_constants import CNT_HANDLER
 from npkpy.npk.cnt_basic import BYTES_LEN_CNT_ID, BYTES_LEN_CNT_PAYLOAD_LEN
 from npkpy.npk.npk_file_basic import FileBasic
@@ -9,20 +10,21 @@ MAGIC_BYTES = b"\x1e\xf1\xd0\xba"
 BYTES_LEN_MAGIC_HEADER = 4
 BYTES_LEN_PCK_SIZE_LEN = 4
 
+"""
+  0____4____8____b____f
+  |    |    |    |    |
+0_|AAAA|BBBB| C ..... |
+1_|....|....|....|....|
+
+
+A = MAGIC BYTES (4)
+B = PCK SIZE (4)
+C = Begin of Container area
+
+"""
+
 
 class Npk(FileBasic):
-    """
-      0____4____8____b____f
-      |    |    |    |    |
-    0_|AAAA|BBBB| C ..... |
-    1_|....|....|....|....|
-
-
-    A = MAGIC BYTES (4)
-    B = PCK SIZE (4)
-    C = Begin of Container area
-
-    """
     __cnt_list = None
 
     def __init__(self, file_path: Path):
@@ -34,12 +36,12 @@ class Npk(FileBasic):
 
     @property
     def pck_magic_bytes(self):
-        return struct.unpack_from(b"4s", self._data, 0)[0]
+        return struct.unpack_from("4s", self._data, 0)[0]
 
     @property
     def pck_payload_len(self):
         self.__pck_payload_size_update()
-        payload_len = struct.unpack_from(b"I", self._data, 4)[0]
+        payload_len = struct.unpack_from("I", self._data, 4)[0]
         return payload_len
 
     def __pck_payload_size_update(self):
@@ -48,7 +50,7 @@ class Npk(FileBasic):
             for cnt in self.pck_cnt_list:
                 current_size += cnt.cnt_full_length
                 cnt.modified = False
-            struct.pack_into(b"I", self._data, 4, current_size)
+            struct.pack_into("I", self._data, 4, current_size)
 
     @property
     def pck_full_size(self):
@@ -87,15 +89,14 @@ class Npk(FileBasic):
 
         data = self.read_data_from_file(offset, pkt_len)
         if len(data) != pkt_len:
-            raise RuntimeError(f"File maybe corrupted. Please download again. File: {self.file.absolute()}")
+            raise NPKError(f"File maybe corrupted. Please download again. File: {self.file.absolute()}")
         try:
             return CNT_HANDLER[cnt_id](data, offset)
         except KeyError:
-            raise RuntimeError(f"failed with id: {cnt_id}\n"
-                               f"New cnt id discovered in file: {self.file.absolute()}")
-        # except TypeError:
-        #     raise RuntimeError(f"failed with id: {cnt_id}\n{self.file.absolute()}")
+            raise NPKIdError(f"Failed with cnt id: {cnt_id}\n"
+                             f"New cnt id discovered in file: {self.file.absolute()}")
+
 
     def _check_magic_bytes(self, error_msg):
         if not self.pck_magic_bytes == MAGIC_BYTES:
-            raise RuntimeError(error_msg)
+            raise NPKError(error_msg)

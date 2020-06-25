@@ -3,10 +3,10 @@ import struct
 
 from npkpy.npk.pck_header import NPK_PCK_HEADER
 
-MAGICBYTES = b"\x1e\xf1\xd0\xba"
+MAGIC_BYTES = b"\x1e\xf1\xd0\xba"
 
 PCKSIZE = struct.pack("I", 28)
-MAGIC_AND_SIZE = MAGICBYTES + PCKSIZE
+MAGIC_AND_SIZE = MAGIC_BYTES + PCKSIZE
 
 # OPENING ARCHITECTURE_TAG
 SET_HEADER_TAG_ID = struct.pack("H", NPK_PCK_HEADER)  # b"\x01\x00"
@@ -32,12 +32,12 @@ MINIMAL_NPK_PACKAGE = MAGIC_AND_SIZE + \
                       CNT_CLOSING_ARCHITECTURE_TAG
 
 
-def get_dummy_npk_binary(payload=None):
-    if not payload:
-        payload = DummyHeaderCnt().get_binary
-    pckPayload = payload
+def get_dummy_npk_binary(cnt=None):
+    if not cnt:
+        cnt = DummyHeaderCnt().get_binary
+    pckPayload = cnt
     pckLen = struct.pack("I", len(pckPayload))
-    npkBinary = MAGICBYTES + pckLen + pckPayload
+    npkBinary = MAGIC_BYTES + pckLen + pckPayload
     return npkBinary
 
 
@@ -134,8 +134,8 @@ class DummyRequirementsHeader:
 
 class DummyBasicCnt:
     _00_cnt_id = struct.pack("h", -1)
-    _01_cnt_payload_len = struct.pack("I", 7)
     _02_cnt_payload = struct.pack("7s", b"Payload")
+    _01_cnt_payload_len = struct.pack("I", len(_02_cnt_payload))
 
     @property
     def cnt_full_binary(self):

@@ -3,7 +3,7 @@ import unittest
 from pathlib import Path, PosixPath
 from unittest.mock import Mock
 
-from npkpy.common import get_pkt_info, get_cnt_info, get_all_nkp_files, write_to_file, extract_container, \
+from npkpy.common import get_short_pkt_info, get_short_cnt_info, get_all_nkp_files, write_to_file, extract_container, \
     get_full_cnt_info, get_full_pkt_info, sha1_sum_from_binary, sha1_sum_from_file
 from npkpy.npk.cnt_basic import CntBasic
 from npkpy.npk.npk import Npk
@@ -101,12 +101,12 @@ class Common_Test(unittest.TestCase):
         npkFile = Mock()
         npkFile.file = self.file
 
-        self.assertEqual([self.file.name], get_pkt_info(npkFile))
+        self.assertEqual([self.file.name], get_short_pkt_info(npkFile))
 
     def test_getBasicCntInfo(self):
         self.file.write_bytes(get_dummy_npk_binary())
 
-        self.assertEqual(['Cnt:  0:PckHeader'], get_cnt_info(Npk(self.file)))
+        self.assertEqual(['Cnt:  0:PckHeader'], get_short_cnt_info(Npk(self.file)))
 
     def test_extractPayloadFromCnt_createFilesWithPayload(self):
         self.file.write_bytes(get_dummy_npk_binary())

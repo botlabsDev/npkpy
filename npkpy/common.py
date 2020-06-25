@@ -16,26 +16,25 @@ def extract_container(npk_file, export_folder, container_ids):
 
 def write_to_file(file, payloads):
     payloads = [payloads] if not isinstance(payloads, list) else payloads
-
     with open(file, "wb") as _file:
         for payload in payloads:
             _file.write(payload)
 
 
-def get_pkt_info(file) -> List:
+def get_short_pkt_info(file) -> List:
     return [str(file.file.name)]
 
 
-def get_cnt_info(file) -> List:
-    return [f"Cnt:{pos:3}:{c.cnt_id_name}" for pos, c in file.pck_enumerate_cnt]
-
-
 def get_full_pkt_info(file) -> List:
-    output = get_pkt_info(file)
-    output += get_cnt_info(file)
+    output = get_short_pkt_info(file)
+    output += get_short_cnt_info(file)
     for cnt in file.pck_cnt_list:
         output += get_full_cnt_info(cnt)
     return output
+
+
+def get_short_cnt_info(file) -> List:
+    return [f"Cnt:{pos:3}:{c.cnt_id_name}" for pos, c in file.pck_enumerate_cnt]
 
 
 def get_full_cnt_info(cnt) -> List:
@@ -61,3 +60,11 @@ def sha1_sum_from_binary(payloads):
         sha1.update(payload)
 
     return sha1.digest()
+
+
+class NPKIdError(BaseException):
+    pass
+
+
+class NPKError(BaseException):
+    pass

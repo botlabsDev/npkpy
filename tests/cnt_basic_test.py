@@ -1,6 +1,7 @@
 import struct
 import unittest
 
+from npkpy.common import NPKError
 from npkpy.npk.cnt_basic import CntBasic
 from tests.constants import DummyBasicCnt
 
@@ -17,7 +18,7 @@ class Test_CntBasic(unittest.TestCase):
         dummy_cnt = DummyBasicCnt()
         dummy_cnt._00_cnt_id = struct.pack("h", 999)
         cnt = CntBasic(dummy_cnt.cnt_full_binary, offset_in_pck=0)
-        with self.assertRaises(RuntimeError) as _exception:
+        with self.assertRaises(NPKError) as _exception:
             _ = cnt.cnt_id
         self.assertEqual("Cnt object does not represent given container typ -1/999", _exception.exception.args[0])
 

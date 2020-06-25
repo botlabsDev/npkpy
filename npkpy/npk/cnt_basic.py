@@ -1,6 +1,8 @@
 import logging
 import struct
 
+from npkpy.common import NPKError
+
 BYTES_LEN_CNT_ID = 2
 BYTES_LEN_CNT_PAYLOAD_LEN = 4
 
@@ -32,7 +34,7 @@ class CntBasic:
     def cnt_id(self):
         cnt_id = struct.unpack_from(b"h", self._data, 0)[0]
         if cnt_id != self._regular_cnt_id:
-            raise RuntimeError(f"Cnt object does not represent given container typ {self._regular_cnt_id}/{cnt_id}")
+            raise NPKError(f"Cnt object does not represent given container typ {self._regular_cnt_id}/{cnt_id}")
         return cnt_id
 
     @property
