@@ -6,7 +6,7 @@ venv=${1:-virtualenv}
 if [[ ! -e ${venv} ]]; then
   virtualenv --python=python ${venv}
   ${venv}/bin/pip install pip --upgrade
-  ${venv}/bin/pip install pip -r requirements.txt
+  ${venv}/bin/pip install pip -r requirements-dev.txt
   ${venv}/bin/pip install pip -e .
 fi
 

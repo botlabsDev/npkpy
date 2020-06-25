@@ -1,0 +1,13 @@
+[MESSAGES CONTROL]
+disable=superfluous-parens,
+        missing-class-docstring,
+        missing-module-docstring,
+        missing-function-docstring,
+        fixme,
+        not-callable,
+        C0103,
+        W0212,
+
+[MISCELLANEOUS]
+max-line-length=120
+

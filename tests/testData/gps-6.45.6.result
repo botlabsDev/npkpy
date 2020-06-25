@@ -50,7 +50,6 @@ PckRequirementsHeader
   Cnt len:          40
   Payload len:      34
   Payload[0:10]:    b'\x01\x00system\x00\x00' [...] 
-  Cnt id:           3
   StructID:         1
   Offset:           149
   Program name:     system

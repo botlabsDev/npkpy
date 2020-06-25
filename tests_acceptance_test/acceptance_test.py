@@ -4,31 +4,40 @@ import unittest
 from pathlib import Path
 
 
-class Test_npkPy(unittest.TestCase):
+class Test_npkpy(unittest.TestCase):
 
     def setUp(self) -> None:
         # TODO: create DummyPkg and replace gps-6.45.6.npk
-        self.npkFile = Path("tests/testData/gps-6.45.6.npk")
-        self.pathToNpk = str(self.npkFile.absolute())
-        self.npkContainerList = Path("tests/testData/gps-6.45.6.result").read_text()
-        self.dstFolder = Path(tempfile.mkdtemp())
+        self.npk_file = Path("tests/testData/gps-6.45.6.npk")
+        self.path_to_npk = str(self.npk_file.absolute())
+        self.npk_container_list = Path("tests/testData/gps-6.45.6.result").read_text()
+        self.dst_folder = Path(tempfile.mkdtemp())
 
     def tearDown(self) -> None:
-        [f.unlink() for f in self.dstFolder.rglob("*") if f.is_file()]
-        [f.rmdir() for f in self.dstFolder.rglob("*")]
-        self.dstFolder.rmdir()
+        for _file in self.dst_folder.rglob("*"):
+            if _file.is_file():
+                _file.unlink()
+        for _file in self.dst_folder.rglob("*"):
+            _file.rmdir()
 
-    def test_showAllContainersFromNpkPkg(self):
-        cmd = ["npkpy", "--file", self.pathToNpk, "--showContainer"]
-        output = runCmdInTerminal(cmd)
-        self.assertEqual(self.npkContainerList, output)
+        self.dst_folder.rmdir()
 
-    def test_exportAllContainerFromNpk(self):
-        cmd = ["npkpy", "--file", self.pathToNpk, "--dstFolder", self.dstFolder.absolute(), "--exportAll"]
+    def test_list_all_containers_from_npk_pkg(self):
+        cmd = ["npkpy", "--file", self.path_to_npk, "--show-container"]
+        output = run_command_in_terminal(cmd)
+        self.assertEqual(self.npk_container_list, output)
 
-        runCmdInTerminal(cmd)
+    def test_list_in_folder(self):
+        cmd = ["npkpy", "--src-folder", str(self.npk_file.parent), "--show-container"]
+        output = run_command_in_terminal(cmd)
+        self.assertEqual(self.npk_container_list, output)
 
-        exportedContainer = sorted(str(f.relative_to(self.dstFolder)) for f in self.dstFolder.rglob('*'))
+    def test_export_all_container_from_npk(self):
+        cmd = ["npkpy", "--file", self.path_to_npk, "--dst-folder", self.dst_folder.absolute(), "--export-all"]
+
+        run_command_in_terminal(cmd)
+
+        exported_container = sorted(str(_file.relative_to(self.dst_folder)) for _file in self.dst_folder.rglob('*'))
         self.assertEqual(['npkPyExport_gps-6.45.6',
                           'npkPyExport_gps-6.45.6/000_cnt_PckHeader.raw',
                           'npkPyExport_gps-6.45.6/001_cnt_PckReleaseTyp.raw',
@@ -39,28 +48,27 @@ class Test_npkPy(unittest.TestCase):
                           'npkPyExport_gps-6.45.6/006_cnt_CntNullBlock.raw',
                           'npkPyExport_gps-6.45.6/007_cnt_CntSquashFsImage.raw',
                           'npkPyExport_gps-6.45.6/008_cnt_CntSquashFsHashSignature.raw',
-                          'npkPyExport_gps-6.45.6/009_cnt_CntArchitectureTag.raw'], exportedContainer)
+                          'npkPyExport_gps-6.45.6/009_cnt_CntArchitectureTag.raw'], exported_container)
 
-    def test_extractSquashFsContainerFromNpk(self):
-        cmd = ["npkpy", "--file", self.pathToNpk, "--dstFolder", self.dstFolder.absolute(), "--exportSquashFs"]
+    def test_extract_squashfs_container_from_npk(self):
+        cmd = ["npkpy", "--file", self.path_to_npk, "--dst-folder", self.dst_folder.absolute(), "--export-squashfs"]
 
-        runCmdInTerminal(cmd)
+        run_command_in_terminal(cmd)
 
-        self.assertContainerExtracted(['npkPyExport_gps-6.45.6',
-                                       'npkPyExport_gps-6.45.6/007_cnt_CntSquashFsImage.raw'])
+        self.assert_container_extracted(['npkPyExport_gps-6.45.6',
+                                         'npkPyExport_gps-6.45.6/007_cnt_CntSquashFsImage.raw'])
 
-    #
-    def test_extractZlibContainerFromNpk_NonExisitngNotExtracted(self):
-        cmd = ["npkpy", "--file", self.pathToNpk, "--dstFolder", self.dstFolder.absolute(), "--exportZlib"]
+    def test_extract_zlib_container_from_npk_nonexisting_not_extracted(self):
+        cmd = ["npkpy", "--file", self.path_to_npk, "--dst-folder", self.dst_folder.absolute(), "--export-zlib"]
 
-        runCmdInTerminal(cmd)
+        run_command_in_terminal(cmd)
 
-        self.assertContainerExtracted([])
+        self.assert_container_extracted([])
 
-    def assertContainerExtracted(self, expectedFiles):
-        extractedContainer = sorted(str(f.relative_to(self.dstFolder)) for f in self.dstFolder.rglob('*'))
-        self.assertEqual(expectedFiles, extractedContainer)
+    def assert_container_extracted(self, expected_files):
+        extracted_container = sorted(str(_file.relative_to(self.dst_folder)) for _file in self.dst_folder.rglob('*'))
+        self.assertEqual(expected_files, extracted_container)
 
 
-def runCmdInTerminal(cmd):
-    return subprocess.run(cmd, stdout=subprocess.PIPE, stderr=subprocess.STDOUT).stdout.decode("UTF-8")
+def run_command_in_terminal(cmd):
+    return subprocess.run(cmd, stdout=subprocess.PIPE, stderr=subprocess.STDOUT, check=True).stdout.decode("UTF-8")

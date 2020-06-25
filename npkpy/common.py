@@ -3,61 +3,58 @@ from pathlib import Path
 from typing import List
 
 
-def getAllNkpFiles(path, containStr=None):
-    return path.glob(f"**/*{containStr}*.npk" if containStr else "**/*.npk")
+def get_all_nkp_files(path, contain_str=None):
+    return path.glob(f"**/*{contain_str}*.npk" if contain_str else "**/*.npk")
 
 
-def extractContainer(npkFile, exportFolder, filterContainer):
-    for position, cnt in enumerate(npkFile.pck_cntList):
-        if cnt.cnt_id in filterContainer:
-            filePath = exportFolder / f"{position:03}_cnt_{cnt.cnt_idName}.raw"
-            writeToFile(filePath, cnt.cnt_payload)
+def extract_container(npk_file, export_folder, container_ids):
+    for position, cnt in enumerate(npk_file.pck_cnt_list):
+        if cnt.cnt_id in container_ids:
+            file_path = export_folder / f"{position:03}_cnt_{cnt.cnt_id_name}.raw"
+            write_to_file(file_path, cnt.cnt_payload)
 
 
-def writeToFile(file, payloads):
-    written = 0
-    if not isinstance(payloads, list):
-        payloads = [payloads]
+def write_to_file(file, payloads):
+    payloads = [payloads] if not isinstance(payloads, list) else payloads
 
-    with open(file, "wb") as f:
+    with open(file, "wb") as _file:
         for payload in payloads:
-            f.write(payload)
-            written += len(payload)
+            _file.write(payload)
 
 
-def getPktInfo(file):
+def get_pkt_info(file) -> List:
     return [str(file.file.name)]
 
 
-def getCntInfo(file) -> List:
-    return [f"Cnt:{pos:3}:{c.cnt_idName}" for pos, c in file.pck_enumerateCnt]
+def get_cnt_info(file) -> List:
+    return [f"Cnt:{pos:3}:{c.cnt_id_name}" for pos, c in file.pck_enumerate_cnt]
 
 
-def getFullPktInfo(file) -> List:
-    output = getPktInfo(file)
-    output += getCntInfo(file)
-    for cnt in file.pck_cntList:
-        output += getFullCntInfo(cnt)
+def get_full_pkt_info(file) -> List:
+    output = get_pkt_info(file)
+    output += get_cnt_info(file)
+    for cnt in file.pck_cnt_list:
+        output += get_full_cnt_info(cnt)
     return output
 
 
-def getFullCntInfo(cnt) -> List:
+def get_full_cnt_info(cnt) -> List:
     info = []
-    idName, options = cnt.output_cnt
-    info.append(f"{idName}")
+    id_name, options = cnt.output_cnt
+    info.append(f"{id_name}")
     for option in options:
         info.append(f"  {option}")
     return info
 
 
-def sha1sumFromFile(file: Path):
-    with file.open('rb') as f:
-        return sha1sumFromBinary(f.read())
+def sha1_sum_from_file(file: Path):
+    with file.open('rb') as _file:
+        return sha1_sum_from_binary(_file.read())
 
 
-def sha1sumFromBinary(payloads):
+def sha1_sum_from_binary(payloads):
     if len(payloads) == 0:
-        return "<empty>"
+        return b"<empty>"
 
     sha1 = hashlib.sha1()
     for payload in [payloads] if not isinstance(payloads, list) else payloads:

@@ -1,0 +1,9 @@
+pytest
+pylint
+pytest_httpserver
+urlpath
+setuptools
+wheel
+twine
+pytest-cov
+
