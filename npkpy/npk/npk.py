@@ -92,9 +92,9 @@ class Npk(FileBasic):
             raise NPKError(f"File maybe corrupted. Please download again. File: {self.file.absolute()}")
         try:
             return CNT_HANDLER[cnt_id](data, offset)
-        except KeyError:
+        except KeyError as e:
             raise NPKIdError(f"Failed with cnt id: {cnt_id}\n"
-                             f"New cnt id discovered in file: {self.file.absolute()}")
+                             f"New cnt id discovered in file: {self.file.absolute()}") from e
 
 
     def _check_magic_bytes(self, error_msg):
