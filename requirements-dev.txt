@@ -6,4 +6,4 @@ setuptools
 wheel
 twine
 pytest-cov
-
+more-itertools
