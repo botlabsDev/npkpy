@@ -1,4 +1,3 @@
-[![Codacy Badge](https://api.codacy.com/project/badge/Grade/fdbef6fc368b4084baab0d3287e87dda)](https://app.codacy.com/manual/botlabsDev/npkpy?utm_source=github.com&utm_medium=referral&utm_content=botlabsDev/npkpy&utm_campaign=Badge_Grade_Dashboard)
 [![Actions Status](https://github.com/botlabsDev/npkpy/workflows/Pytest/badge.svg)](https://github.com/botlabsDev/npkpy/actions)
 [![codecov](https://codecov.io/gh/botlabsDev/npkpy/branch/master/graph/badge.svg?token=4ns6uIqoln)](https://codecov.io/gh/botlabsDev/npkpy)
 
