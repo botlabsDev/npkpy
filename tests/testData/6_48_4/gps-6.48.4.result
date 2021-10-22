@@ -1,0 +1,92 @@
+gps-6.48.4.npk
+Cnt:  0:PckPreHeader
+Cnt:  1:PckHeader
+Cnt:  2:PckReleaseTyp
+Cnt:  3:CntArchitectureTag
+Cnt:  4:PckDescription
+Cnt:  5:PckEckcdsaHash
+Cnt:  6:PckRequirementsHeader
+Cnt:  7:CntNullBlock
+Cnt:  8:CntSquashFsImage
+Cnt:  9:CntSquashFsHashSignature
+Cnt: 10:CntArchitectureTag
+PckPreHeader
+  Cnt id:           25
+  Cnt offset:       8
+  Cnt len:          6
+  Payload len:      0
+  Payload[0:0]:    b'' [...] 
+PckHeader
+  Cnt id:           1
+  Cnt offset:       14
+  Cnt len:          42
+  Payload len:      36
+  Payload[0:10]:    b'gps\x00\x00\x00\x00\x00\x00\x00' [...] 
+  Program name:     gps
+  Os version:       6.48.4 - rc(?): 102
+  Created at:       2021-08-18 06:43:27
+  NullBlock:        (0, 0, 0, 0)
+  Flags:            (0, 0, 0, 0, 2, 0, 0)
+PckReleaseTyp
+  Cnt id:           24
+  Cnt offset:       56
+  Cnt len:          12
+  Payload len:      6
+  Payload[0:6]:    b'stable' [...] 
+CntArchitectureTag
+  Cnt id:           16
+  Cnt offset:       68
+  Cnt len:          10
+  Payload len:      4
+  Payload[0:4]:    b'i386' [...] 
+PckDescription
+  Cnt id:           2
+  Cnt offset:       78
+  Cnt len:          31
+  Payload len:      25
+  Payload[0:10]:    b'Provides s' [...] 
+PckEckcdsaHash
+  Cnt id:           23
+  Cnt offset:       109
+  Cnt len:          46
+  Payload len:      40
+  Payload[0:10]:    b'589981d829' [...] 
+PckRequirementsHeader
+  Cnt id:           3
+  Cnt offset:       155
+  Cnt len:          40
+  Payload len:      34
+  Payload[0:10]:    b'\x01\x00system\x00\x00' [...] 
+  StructID:         1
+  Offset:           155
+  Program name:     system
+  Null block:       (0, 0, 0, 0)
+  Os versionFrom:   6.48.4 - rc(?): 102
+  Os versionTo:     6.48.4 - rc(?): 102
+  Flags:            <not available for version 0,1>
+CntNullBlock
+  Cnt id:           22
+  Cnt offset:       195
+  Cnt len:          3895
+  Payload len:      3889
+  Payload[0:10]:    b'\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00' [...] 
+CntSquashFsImage
+  Cnt id:           21
+  Cnt offset:       4090
+  Cnt len:          49158
+  Payload len:      49152
+  Payload[0:10]:    b'hsqs\x15\x00\x00\x00\xdb\xac' [...] 
+  calc Sha1Hash:    b'&1=\x9e\x05\xef\x19\xb218AVQ\xa2g&j5\x9c\x87'
+CntSquashFsHashSignature
+  Cnt id:           9
+  Cnt offset:       53248
+  Cnt len:          138
+  Payload len:      132
+  Payload[0:10]:    b'\xca\xdb\x02\xed,\xca\x13\xc2\x88J' [...] 
+  Payload[-10:]:    b'7\x9dF\xf4\x14\xd3,\x16\x18\x06'
+CntArchitectureTag
+  Cnt id:           16
+  Cnt offset:       53386
+  Cnt len:          7
+  Payload len:      1
+  Payload[0:1]:    b'I' [...] 
