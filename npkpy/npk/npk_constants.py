@@ -1,3 +1,4 @@
+from npkpy.npk.pck_preheader import NPK_PCK_PREHEADER, PckPreHeader
 from npkpy.npk.pck_multicontainer_list import NPK_MULTICONTAINER_LIST, PktMulticontainerList
 from npkpy.npk.cnt_architecture_tag import NPK_ARCHITECTURE_TAG, CntArchitectureTag
 from npkpy.npk.cnt_null_block import NPK_NULL_BLOCK, CntNullBlock
@@ -15,8 +16,6 @@ from npkpy.npk.cnt_flag_c import NPK_FLAG_C, CntFlagC
 from npkpy.npk.cnt_flag_a import NPK_FLAG_A, CntFlagA
 from npkpy.npk.pck_multicontainer_header import NPK_MULTICONTAINER_HEADER, PktMulticontainerHeader
 from npkpy.npk.cnt_mpls import NPK_MPLS, CntMpls
-
-
 
 CNT_HANDLER = {
     NPK_CNT_BASIC: CntBasic,
@@ -45,7 +44,7 @@ CNT_HANDLER = {
     NPK_NULL_BLOCK: CntNullBlock,
     NPK_ECKCDSA_HASH: PckEckcdsaHash,
     NPK_RELEASE_TYP: PckReleaseTyp,
-    25: "?",
+    NPK_PCK_PREHEADER: PckPreHeader,
     26: "?",
     27: "?",
     28: "?",

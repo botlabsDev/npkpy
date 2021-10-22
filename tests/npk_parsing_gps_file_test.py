@@ -7,7 +7,7 @@ from npkpy.npk.npk import Npk, MAGIC_BYTES
 
 class GpsFile_Test(unittest.TestCase):
     def setUp(self) -> None:
-        self.npkFile = Path("tests/testData/gps-6.45.6.npk")
+        self.npkFile = Path("tests/testData/6_45_6/gps-6.45.6.npk")
         self.npk = Npk(self.npkFile)
         self.cnt = self.npk.pck_cnt_list
 
