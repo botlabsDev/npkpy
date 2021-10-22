@@ -11,6 +11,7 @@ RE_PROGRAM_NAME = '(^[\\w-]*)-'
 
 
 class FileBasic:
+    # pylint: disable=unused-private-member
     __data = None
 
     def __init__(self, file_path: Path):
